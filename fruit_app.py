@@ -88,7 +88,10 @@ def prob_bar(label_name, emoji, prob, is_pred, color, track_color):
     </div>"""
 
 # ── 헤더 ────────────────────────────────────────────────────────────────
-st.title("🍎 과일 신선도 분류기")
+st.markdown(
+    "<h1 style='font-size:1.5rem; margin-bottom:0;'>🍎 과일 신선도 분류기</h1>",
+    unsafe_allow_html=True,
+)
 st.caption(
     "VGG16 Transfer Learning &nbsp;·&nbsp; "
     "DGX Spark GB10 &nbsp;·&nbsp; "
