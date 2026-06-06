@@ -100,36 +100,27 @@ st.divider()
 
 model = load_model()
 
-# ── 이미지 입력 (파일 업로드 / 카메라) ──────────────────────────────────
-tab_upload, tab_camera = st.tabs(["📤 파일 업로드", "📷 카메라 촬영"])
-
-with tab_upload:
-    uploaded = st.file_uploader(
-        "과일 이미지를 업로드하세요 (JPG / PNG)",
-        type=["jpg", "jpeg", "png"],
-        help="사과 · 바나나 · 오렌지의 신선 여부를 판별합니다",
-    )
-
-with tab_camera:
-    captured = st.camera_input("카메라로 과일을 촬영하세요")
-
-raw_input = uploaded or captured
+# ── 파일 업로더 ──────────────────────────────────────────────────────────
+uploaded = st.file_uploader(
+    "과일 이미지를 업로드하세요 (JPG / PNG)",
+    type=["jpg", "jpeg", "png"],
+    help="사과 · 바나나 · 오렌지의 신선 여부를 판별합니다",
+)
 
 def open_image(file_obj) -> Image.Image:
-    """파일 객체를 열고 EXIF 방향을 보정하여 반환"""
     img = Image.open(file_obj)
-    img.load()  # EXIF 읽기 전 완전히 로드
+    img.load()
     return ImageOps.exif_transpose(img)
 
-if raw_input is None:
+if uploaded is None:
     st.markdown(
         "<div style='text-align:center; padding:60px 0; color:#aaa; font-size:1.1rem;'>"
-        "📤 이미지를 업로드하거나 카메라로 촬영하면 신선도를 판단합니다"
+        "📤 이미지를 업로드하면 신선도를 판단합니다"
         "</div>",
         unsafe_allow_html=True,
     )
 else:
-    image  = open_image(raw_input)
+    image  = open_image(uploaded)
     probs  = predict(model, image)
     idx    = int(probs.argmax())
 
